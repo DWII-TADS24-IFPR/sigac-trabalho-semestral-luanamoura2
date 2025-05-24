@@ -2,9 +2,24 @@
 
 @section('content')
     <section class="bg-primary text-white text-center py-5">
-       <di v class="container">
+        <div class="container">
             <h1 class="display-4">Bem-vindo ao SIGAC</h1>
             <p class="lead">Sistema Integrado de Gestão Acadêmica e Certificados</p>
+            {{-- Nova seção para as opções de acesso --}}
+            <div class="mt-4">
+                <h3 class="mb-3">Acesse o Sistema</h3>
+                <div class="d-flex justify-content-center flex-wrap gap-3">
+                    <a href="{{ route('login.aluno') }}" class="btn btn-lg btn-success">
+                        <i class="bi bi-person-circle me-2"></i>Sou Aluno
+                    </a>
+                    <a href="{{ route('register.aluno') }}" class="btn btn-lg btn-info">
+                        <i class="bi bi-person-plus me-2"></i>Cadastre-se como Aluno
+                    </a>
+                    <a href="{{ route('login.admin') }}" class="btn btn-lg btn-warning">
+                        <i class="bi bi-shield-lock me-2"></i>Acesso Administrador
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -42,8 +57,4 @@
           </div>
         </div>
       </section>
-        </div>
-    </section>
-
-    
 @endsection
