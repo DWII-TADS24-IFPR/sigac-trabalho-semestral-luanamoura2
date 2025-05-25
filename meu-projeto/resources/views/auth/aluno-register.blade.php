@@ -50,7 +50,12 @@
                             <div class="d-grid mt-4">
                               
                             </div>
-
+                                 <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            Cadastrar
+                        </button>
+                    </div>
+                       
                             <div class="text-center mt-3">
                                 <a href="{{ route('login.aluno') }}">Já tem cadastro? Faça login!</a>
                             </div>

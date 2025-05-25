@@ -9,6 +9,25 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+
+    public function registerAluno(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|confirmed|min:4',
+    ]);
+
+    User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+        'is_admin' => false, 
+    ]);
+
+    return redirect()->route('login.aluno')->with('success', 'Cadastro realizado com sucesso!');
+}
+
     public function loginAluno(Request $request)
     {
         $credentials = $request->validate([
