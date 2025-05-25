@@ -1,3 +1,5 @@
+ @php $hideNavbar = true; @endphp
+
 @extends('layouts.app')
 
 @section('content')
@@ -6,15 +8,24 @@
         <div class="col-md-6">
             <div class="card shadow-lg border-0 rounded-lg mt-5">
                 <div class="card-header bg-primary text-white text-center">
-                    <h3 class="fw-light my-4">Login do Aluno</h3>
+                     <h4 class="mb-0">Login</h4>
                 </div>
                 <div class="card-body p-4">
-                    <form method="POST" action="#"> {{-- O action será atualizado quando implementarmos o POST --}}
-                        @csrf {{-- Diretiva obrigatória do Laravel para proteção CSRF --}}
+                     @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                    <form method="POST" action="#"> 
+                        @csrf
 
                         <div class="mb-3">
-                            <label for="matricula" class="form-label">Matrícula ou E-mail</label>
-                            <input type="text" class="form-control" id="matricula" name="matricula" required autofocus>
+                            <label for="email" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="email"  name="email" required autofocus>
                         </div>
 
                         <div class="mb-3">

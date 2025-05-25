@@ -9,38 +9,51 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function showAlunoLoginForm()
+    public function loginAluno(Request $request)
     {
-        return view('auth.aluno-login');
-    }
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-    public function showAlunoRegisterForm()
-    {
-        return view('auth.aluno-register');
-    }
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-     public function registerAluno(Request $request)
-    {
-        
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
            
-            'password' => 'required|string|min:8|confirmed',
+            if (!Auth::user()->is_admin) {
+                return redirect()->intended(route('home'));
+            }
+
+            Auth::logout();
+            return back()->withErrors(['email' => 'A conta informada não é de aluno.']);
+        }
+
+        return back()->withErrors([
+            'email' => 'As credenciais fornecidas não são válidas.',
+        ]);
+    }
+
+    public function loginAdmin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-       
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-          
-            'password' => Hash::make($request->password),
-            'is_admin' => false,
+            // Verifica se É admin
+            if (Auth::user()->is_admin) {
+                return redirect()->intended(route('home'));
+            }
+
+            Auth::logout();
+            return back()->withErrors(['email' => 'A conta informada não é de administrador.']);
+        }
+
+        return back()->withErrors([
+            'email' => 'As credenciais fornecidas não são válidas.',
         ]);
-
-        Auth::login($user);
-
-        return redirect()->route('home')->with('success', 'Cadastro realizado com sucesso! Bem-vindo(a)!');
     }
 }

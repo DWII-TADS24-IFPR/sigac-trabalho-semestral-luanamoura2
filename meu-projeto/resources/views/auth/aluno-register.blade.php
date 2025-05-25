@@ -1,14 +1,28 @@
+    @php $hideNavbar = true; @endphp
+
     @extends('layouts.app')
+
+
 
     @section('content')
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-7">
                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                    <div class="card-header bg-info text-white text-center">
-                        <h3 class="fw-light my-4">Cadastro de Aluno</h3>
+                     <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Cadastre-se </h4>
                     </div>
                     <div class="card-body p-4">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <form method="POST" action="{{ route('register.aluno.post') }}"> 
                             @csrf 
 
@@ -34,7 +48,7 @@
                             </div>
 
                             <div class="d-grid mt-4">
-                                <button type="submit" class="btn btn-info btn-lg">Cadastrar</button>
+                              
                             </div>
 
                             <div class="text-center mt-3">

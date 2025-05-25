@@ -25,3 +25,6 @@ footer {
     position: relative;
     
 }
+.no-bg {
+    background-color: transparent !important;
+}
