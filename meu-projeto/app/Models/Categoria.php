@@ -7,6 +7,7 @@ use App\Models\Curso;
 use App\Models\Documento;
 use App\Models\Comprovante;
 
+
 class Categoria extends Model
 {
     protected $table = 'categorias';

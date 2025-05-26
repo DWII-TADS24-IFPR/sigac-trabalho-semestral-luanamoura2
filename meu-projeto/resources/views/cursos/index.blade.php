@@ -9,7 +9,7 @@
             <h4 class="mb-0">Lista de Cursos</h4>
         </div>
         <div class="card-body">
-     
+
             <div class="mb-3">
                 <a href="{{ route('cursos.create') }}" class="btn btn-primary">
                     <i class="bi bi-file-earmark-plus"></i> Adicionar Curso
@@ -25,10 +25,10 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-dark">
                     <tr>
-
                         <th>Nome</th>
                         <th>Sigla</th>
                         <th>Nível</th>
+                        <th>Eixo</th> 
                         <th>Total de Horas</th>
                         <th>Ações</th>
                     </tr>
@@ -36,10 +36,10 @@
                 <tbody>
                     @forelse ($cursos as $curso)
                         <tr>
-                        
                             <td>{{ $curso->nome }}</td>
                             <td>{{ $curso->sigla }}</td>
                             <td>{{ $curso->nivel->nome ?? '-' }}</td>
+                            <td>{{ $curso->eixo->nome ?? '-' }}</td> 
                             <td>{{ (int) $curso->total_horas }}</td>
                             <td>
                                 <a href="{{ route('cursos.show', $curso->id) }}" class="btn btn-info btn-sm">

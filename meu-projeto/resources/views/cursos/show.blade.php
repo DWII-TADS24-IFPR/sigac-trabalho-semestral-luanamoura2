@@ -18,6 +18,7 @@
                         <th>Nome</th>
                         <th>Sigla</th>
                         <th>Nível</th>
+                        <th>Eixo</th> 
                         <th>Total de Horas</th>
                     </tr>
                 </thead>
@@ -27,6 +28,7 @@
                         <td>{{ $curso->nome }}</td>
                         <td>{{ $curso->sigla }}</td>
                         <td>{{ $curso->nivel->nome ?? 'Sem nível' }}</td>
+                        <td>{{ $curso->eixo->nome ?? 'Sem eixo' }}</td>
                         <td>{{ $curso->total_horas }}</td>
                     </tr>
                 </tbody>

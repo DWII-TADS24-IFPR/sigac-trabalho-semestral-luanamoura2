@@ -8,6 +8,7 @@ use App\Models\Turma;
 use App\Models\Comprovante;
 use App\Models\Declaracao;
 
+
 class Aluno extends Model
 {
     protected $table = 'alunos';

@@ -41,7 +41,6 @@
           @error('total_horas') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
 
-      
         <div class="mb-3">
           <label for="nivel_id" class="form-label">Nível</label>
           <select name="nivel_id" id="nivel_id" class="form-select rounded-3" required>
@@ -54,6 +53,23 @@
           </select>
           @error('nivel_id') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
+
+      
+        <div class="mb-3">
+            <label for="eixo_id" class="form-label">Eixo</label>
+            <select name="eixo_id" id="eixo_id" class="form-select rounded-3" required>
+                <option value="">Selecione um Eixo</option>
+                @foreach($eixos as $eixo)
+                    <option value="{{ $eixo->id }}" {{ $curso->eixo_id == $eixo->id ? 'selected' : '' }}>
+                        {{ $eixo->nome }}
+                    </option>
+                @endforeach
+            </select>
+            @error('eixo_id')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+       
 
         <div class="mb-3">
           <label for="turma_id" class="form-label">Turma</label>

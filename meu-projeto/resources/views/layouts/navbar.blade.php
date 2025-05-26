@@ -47,6 +47,7 @@
             <li><a class="dropdown-item" href="{{ route('declaracoes.index') }}">Declarações</a></li>
             <li><a class="dropdown-item" href="{{ route('documentos.index') }}">Documentos</a></li>
             <li><a class="dropdown-item" href="{{ route('categorias.index') }}">Categorias</a></li>
+             <li><a class="dropdown-item" href="{{ route('eixos.index') }}">Eixos</a></li>
           </ul>
         </li>
       </ul>

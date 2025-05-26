@@ -26,9 +26,26 @@
             <option value="{{ $nivel->id }}">{{ $nivel->nome }}</option>
             @endforeach
           </select>
+          @error('nivel_id')
+            <div class="text-danger">{{ $message }}</div>
+          @enderror
         </div>
 
-
+        <div class="mb-3">
+            <label for="eixo_id" class="form-label">Eixo</label>
+            <select name="eixo_id" id="eixo_id" class="form-control" required>
+                <option value="">Selecione um Eixo</option>
+                @foreach($eixos as $eixo)
+                    <option value="{{ $eixo->id }}">
+                        {{ $eixo->nome }}
+                    </option>
+                @endforeach
+            </select>
+            @error('eixo_id')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+     
 
         <div class="mb-3">
           <label for="total_horas" class="form-label">Total de Horas</label>

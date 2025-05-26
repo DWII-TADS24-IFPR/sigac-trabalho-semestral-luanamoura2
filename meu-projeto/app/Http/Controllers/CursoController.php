@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Curso;
 use App\Models\Turma;
 use App\Models\Nivel;
+use App\Models\Eixo;
 
 class CursoController extends Controller
 {
     
     public function index()
     {
-        $cursos = Curso::with('nivel')->get();
+        $cursos = Curso::with('nivel', 'eixo')->get(); 
         return view('cursos.index', compact('cursos'));
     }
 
@@ -22,7 +23,8 @@ class CursoController extends Controller
     {
         $turmas = Turma::all();
         $nivels = Nivel::all();
-        return view('cursos.create', compact('turmas', 'nivels'));
+        $eixos = Eixo::all(); 
+        return view('cursos.create', compact('turmas', 'nivels', 'eixos'));
     }
 
     
@@ -33,6 +35,7 @@ class CursoController extends Controller
             'sigla' => 'required|string|max:10',
             'nivel_id' => 'required|exists:nivels,id',  
             'total_horas' => 'required|integer',
+            'eixo_id' => 'required|exists:eixos,id',
         ]);
 
 
@@ -42,6 +45,7 @@ class CursoController extends Controller
             'sigla' => $request->sigla,
             'nivel_id' => $request->nivel_id,
             'total_horas' => $request->total_horas,
+            'eixo_id' => $request->eixo_id,
         ]);
 
         return redirect()->route('cursos.index')->with('success', 'Curso criado com sucesso!');
@@ -50,7 +54,7 @@ class CursoController extends Controller
 
     public function show(string $id)
     {
-        $curso = Curso::with('nivel')->findOrFail($id);
+        $curso = Curso::with('nivel', 'eixo')->findOrFail($id); 
         return view('cursos.show', compact('curso'));
     }
 
@@ -60,7 +64,8 @@ class CursoController extends Controller
         $curso = Curso::findOrFail($id);
         $turmas = Turma::all();
         $nivels = Nivel::all();
-        return view('cursos.edit', compact('curso', 'turmas', 'nivels'));
+        $eixos = Eixo::all();
+        return view('cursos.edit', compact('curso', 'turmas', 'nivels', 'eixos'));
     }
 
 
@@ -71,6 +76,7 @@ class CursoController extends Controller
             'sigla' => 'required|string|max:10',
             'nivel_id' => 'required|exists:nivels,id',
             'total_horas' => 'required|integer',
+            'eixo_id' => 'required|exists:eixos,id',
         ]);
 
         $curso = Curso::findOrFail($id);
@@ -79,6 +85,7 @@ class CursoController extends Controller
             'sigla' => $request->sigla,
             'nivel_id' => $request->nivel_id,
             'total_horas' => $request->total_horas,
+            'eixo_id' => $request->eixo_id,
         ]);
 
         return redirect()->route('cursos.index')->with('success', 'Curso atualizado com sucesso!');

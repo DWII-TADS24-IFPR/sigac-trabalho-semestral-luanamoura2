@@ -7,8 +7,6 @@ use App\Models\Aluno;
 use App\Models\Curso;
 use App\Models\Turma;
 
-
-
 class AlunoController extends Controller
 {
    
