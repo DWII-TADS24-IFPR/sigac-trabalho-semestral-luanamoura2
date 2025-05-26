@@ -55,16 +55,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/relatorios', [Relatoriocontroller::class, 'emitirRelatorio'])->name('relatorio.emitir');
 });
 
-Route::prefix('aluno')->middleware('auth')->group(function () {
-    Route::middleware(function ($request, $next) {
-        $user = Auth::user();
-        if ($user && $user->is_admin === false) {
-            return $next($request);
-        }
-        abort(403);
-    })->group(function () {
-        Route::get('/solicitacoes', [SolicitacaoController::class, 'index'])->name('solicitacoes.index');
-        Route::get('/solicitacoes/create', [SolicitacaoController::class, 'create'])->name('solicitacoes.create');
-        Route::post('/solicitacoes', [SolicitacaoController::class, 'store'])->name('solicitacoes.store');
-    });
+Route::prefix('aluno')->middleware(['auth', 'aluno'])->group(function () {
+    Route::get('/solicitacoes', [SolicitacaoController::class, 'index'])->name('solicitacoes.index');
+    Route::get('/solicitacoes/create', [SolicitacaoController::class, 'create'])->name('solicitacoes.create');
+    Route::post('/solicitacoes', [SolicitacaoController::class, 'store'])->name('solicitacoes.store');
 });
+

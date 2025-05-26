@@ -1,32 +1,47 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Models;
 
-use App\Models\Aluno;
-use App\Models\Turma;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-
-class DatabaseSeeder extends Seeder
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens; 
+class User extends Authenticatable
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        Aluno::create([
-            'nome'=>'Carol',
-            'cpf'=>'12345678900',
-            'email'=>'carol@gmail.com',
-            'senha'=>'12345678',
-            'turma_id' => 1,
-            'curso_id' => 1,
-        ]);
+    use HasApiTokens, HasFactory, Notifiable; 
 
-        Turma::create([
-            'ano' => 2005,
-            'curso_id' => 1,
-        ]);
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'is_admin',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'is_admin' => 'boolean',
+    ];
+
+        
+
+    public function solicitacoes()
+    {
+        return $this->hasMany(Solicitacao::class, 'user_id');
+    }
+
+    public function isAluno()
+    {
+        return $this->is_admin === false;
+    }
+
+    public function isAdmin()
+    {
+        return $this->is_admin === true;
     }
 }
