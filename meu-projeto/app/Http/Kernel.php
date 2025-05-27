@@ -17,11 +17,11 @@ class Kernel extends HttpKernel
         'api' => [
           
         ],
-    ];
+        ];
 
-    protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'aluno' => \App\Http\Middleware\AlunoMiddleware::class,
-        'admin' => \App\Http\Middleware\AdminMiddleware::class,
-    ];
-}
+        protected $routeMiddleware = [
+            'auth' => \App\Http\Middleware\Authenticate::class,
+            'aluno' => \App\Http\Middleware\AlunoMiddleware::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        ];
+    }
