@@ -34,10 +34,10 @@ Route::prefix('aluno')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::get('login', fn() => view('auth.admin-login'))->name('login.admin');
     Route::post('login', [AdminController::class, 'loginAdmin'])->name('login.admin.post');
-    
-   Route::middleware(['auth', 'admin'])->group(function () {
-        Route::resource('eixos', EixoController::class);
-    });
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('eixos', EixoController::class);
 });
 
 Route::middleware('auth')->group(function () {
@@ -51,9 +51,10 @@ Route::middleware('auth')->group(function () {
         'documentos' => DocumentoController::class,
         'turmas' => TurmaController::class,
     ]);
+});
 
     Route::get('/relatorios', [Relatoriocontroller::class, 'emitirRelatorio'])->name('relatorio.emitir');
-});
+
 
 Route::prefix('aluno')->middleware(['auth', 'aluno'])->group(function () {
     Route::get('/solicitacoes', [SolicitacaoController::class, 'index'])->name('solicitacoes.index');

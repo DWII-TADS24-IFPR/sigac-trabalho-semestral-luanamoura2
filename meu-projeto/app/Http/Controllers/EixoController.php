@@ -4,32 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Eixo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; 
 
 class EixoController extends Controller
 {
-    
     public function __construct()
     {
-      
-         $this->middleware(['auth', 'admin']);
-        
+        $this->middleware(['auth', 'admin']);
     }
-
 
     public function index()
     {
         $eixos = Eixo::all();
-        return view('admin.eixos.index', compact('eixos'));
+        return view('eixos.index', compact('eixos'));
     }
 
-   
-     
     public function create()
     {
-        return view('admin.eixos.create');
+        return view('eixos.create');
     }
-     
+
     public function store(Request $request)
     {
         $request->validate([
@@ -38,19 +31,12 @@ class EixoController extends Controller
 
         Eixo::create($request->all());
 
-        return redirect()->route('admin.eixos.index')->with('success', 'Eixo criado com sucesso!');
-    }
-
-   
-
-    public function show(Eixo $eixo)
-    {
-        
+        return redirect()->route('eixos.index')->with('success', 'Eixo criado com sucesso!');
     }
 
     public function edit(Eixo $eixo)
     {
-        return view('admin.eixos.edit', compact('eixo'));
+        return view('eixos.edit', compact('eixo'));
     }
 
     public function update(Request $request, Eixo $eixo)
@@ -61,12 +47,13 @@ class EixoController extends Controller
 
         $eixo->update($request->all());
 
-        return redirect()->route('admin.eixos.index')->with('success', 'Eixo atualizado com sucesso!');
+        return redirect()->route('eixos.index')->with('success', 'Eixo atualizado com sucesso!');
     }
 
     public function destroy(Eixo $eixo)
     {
         $eixo->delete();
-        return redirect()->route('admin.eixos.index')->with('success', 'Eixo excluído com sucesso!');
+
+        return redirect()->route('eixos.index')->with('success', 'Eixo excluído com sucesso!');
     }
 }
