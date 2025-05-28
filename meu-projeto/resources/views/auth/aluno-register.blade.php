@@ -1,4 +1,5 @@
     @php $hideNavbar = true; @endphp
+    @php use Carbon\Carbon; @endphp
 
     @extends('layouts.app')
 
@@ -35,7 +36,28 @@
                                 <label for="email" class="form-label">E-mail</label>
                                 <input type="email" class="form-control" id="email" name="email" required>
                             </div>
+                            <div class="mb-3">
+                                <label for="cpf" class="form-label">CPF</label>
+                                <input type="text" class="form-control" id="cpf" name="cpf" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="curso_id" class="form-label">Curso</label>
+                                <select class="form-select" id="curso_id" name="curso_id" required>
+                                    @foreach ($cursos as $curso)
+                                        <option value="{{ $curso->id }}">{{ $curso->nome }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
+                            <select class="form-select" id="turma_id" name="turma_id" required>
+                                @foreach ($turmas as $turma)
+                                    <option value="{{ $turma->id }}">Turma {{ $turma->ano }}</option>
+                                @endforeach
+                            </select>
+                            
+                            
+                            
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="password" class="form-label">Senha</label>

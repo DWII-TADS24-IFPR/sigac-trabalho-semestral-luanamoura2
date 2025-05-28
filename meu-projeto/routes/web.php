@@ -1,19 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NivelController;
-use App\Http\Controllers\AlunoController;
-use App\Http\Controllers\CategoriaController;
-use App\Http\Controllers\ComprovanteController;
-use App\Http\Controllers\CursoController;
-use App\Http\Controllers\DeclaracaoController;
-use App\Http\Controllers\DocumentoController;
-use App\Http\Controllers\Relatoriocontroller;
-use App\Http\Controllers\TurmaController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\SolicitacaoController;
-use App\Http\Controllers\EixoController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\{
+    NivelController,
+    AlunoController,
+    CategoriaController,
+    ComprovanteController,
+    CursoController,
+    DeclaracaoController,
+    DocumentoController,
+    Relatoriocontroller,
+    TurmaController,
+    AuthController,
+    SolicitacaoController,
+    EixoController,
+    AdminController
+};
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AlunoMiddleware;
 
@@ -26,11 +28,11 @@ Route::get('/', fn() => view('home'))->middleware('auth')->name('home');
 Route::get('/login', fn() => redirect()->route('entrada'))->name('login');
 
 Route::prefix('aluno')->group(function () {
+    Route::get('cadastro', [AuthController::class, 'showRegisterAlunoForm'])->name('register.aluno');
+    Route::post('cadastro', [AuthController::class, 'registerAluno'])->name('register.aluno.post');
+
     Route::get('login', fn() => view('auth.aluno-login'))->name('login.aluno');
     Route::post('login', [AuthController::class, 'loginAluno'])->name('login.aluno.post');
-
-    Route::get('cadastro', fn() => view('auth.aluno-register'))->name('register.aluno');
-    Route::post('cadastro', [AuthController::class, 'registerAluno'])->name('register.aluno.post');
 });
 
 Route::prefix('admin')->group(function () {
@@ -38,9 +40,7 @@ Route::prefix('admin')->group(function () {
     Route::post('login', [AdminController::class, 'loginAdmin'])->name('login.admin.post');
 });
 
-Route::post('/register-aluno', [AuthController::class, 'registerAluno'])->name('register.aluno.post');
-
-Route::middleware(['auth', AdminMiddleware::class])->group(function () {
+Route::middleware([AdminMiddleware::class,'auth'])->group(function () {
     Route::resource('/eixos', EixoController::class);
     Route::resources([
         'nivels' => NivelController::class,
@@ -52,18 +52,18 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
         'documentos' => DocumentoController::class,
         'turmas' => TurmaController::class,
     ]);
+    Route::post('comprovantes/{comprovante}/aprovar', [App\Http\Controllers\ComprovanteController::class, 'aprovar'])->name('comprovantes.aprovar');
+    Route::post('comprovantes/{comprovante}/rejeitar', [App\Http\Controllers\ComprovanteController::class, 'rejeitar'])->name('comprovantes.rejeitar');
 });
 
-    Route::get('/relatorios', [Relatoriocontroller::class, 'emitirRelatorio'])->name('relatorio.emitir');
-
+Route::get('/relatorios', [Relatoriocontroller::class, 'emitirRelatorio'])->name('relatorio.emitir');
 
 Route::prefix('aluno')->middleware(['auth', AlunoMiddleware::class])->group(function () {
     Route::get('/declaracao', [DeclaracaoController::class, 'emitirParaAluno'])->name('declaracao.aluno');
 
-    
     Route::get('/solicitacoes', [SolicitacaoController::class, 'index'])->name('solicitacoes.index');
     Route::get('/solicitacoes/create', [SolicitacaoController::class, 'create'])->name('solicitacoes.create');
     Route::post('/solicitacoes', [SolicitacaoController::class, 'store'])->name('solicitacoes.store');
-    
-});
 
+    Route::get('/declaracoes/emitir', [SolicitacaoController::class, 'emitirDeclaracao'])->name('declaracoes.emitir');
+});

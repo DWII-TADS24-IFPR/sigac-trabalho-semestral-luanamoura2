@@ -6,14 +6,39 @@ use App\Models\Comprovante;
 use App\Models\Categoria;
 use App\Models\Aluno;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ComprovanteController extends Controller
 {
     public function index()
     {
-        $comprovantes = Comprovante::with(['categoria', 'aluno'])->get();
+        $comprovantes = Comprovante::where('status', 'pendente')
+            ->with(['categoria', 'aluno'])
+            ->get();
+        
+        dd($comprovantes);
         return view('comprovantes.index', compact('comprovantes'));
     }
+    
+
+    public function aprovar($id)
+    {
+        $comprovante = Comprovante::findOrFail($id);
+        $comprovante->status = 'aprovado';
+        $comprovante->save();
+
+        return redirect()->route('comprovantes.index')->with('success', 'Comprovante aprovado com sucesso.');
+    }
+    
+    public function rejeitar($id)
+    {
+        $comprovante = Comprovante::findOrFail($id);
+        $comprovante->status = 'rejeitado';
+        $comprovante->save();
+
+        return redirect()->route('comprovantes.index')->with('success', 'Comprovante rejeitado com sucesso.');
+    }
+
 
     public function create()
     {
@@ -28,11 +53,23 @@ class ComprovanteController extends Controller
             'atividade' => 'required|string|max:255',
             'horas' => 'required|integer|min:0',
             'categoria_id' => 'required|exists:categorias,id',
-            'aluno_id' => 'required|exists:alunos,id',
+            
         ]);
 
-        Comprovante::create($request->all());
+        $aluno = Auth::user()->aluno;
 
+        if (!$aluno) {
+            return redirect()->back()->with('error', 'Você não está cadastrado como aluno.');
+        }
+    
+        Comprovante::create([
+            'atividade' => $request->atividade,
+            'horas' => $request->horas,
+            'categoria_id' => $request->categoria_id,
+            'aluno_id' => $aluno->id,
+            'status' => 'pendente',
+        ]);
+    
         return redirect()->route('comprovantes.index')->with('success', 'Comprovante criado com sucesso!');
     }
 

@@ -93,22 +93,24 @@ class DeclaracaoController extends Controller
         return redirect()->route('declaracoes.index')->with('success', 'Declaração excluída com sucesso!');
     }
 
-public function emitirParaAluno()
-{
-    $user = Auth::user();
-    $aluno = $user->aluno;
 
-    if (!$aluno) {
-        return redirect()->back()->with('error', 'Você não está registrado como aluno.');
-    }
-
+    public function emitirParaAluno()
+    {
+        $user = Auth::user();
+        $aluno = $user->aluno;
     
-    if ($aluno->horas_complementares < 40) {
-        return redirect()->back()->with('error', 'Você ainda não cumpriu as horas necessárias para emitir a declaração.');
+        if (!$aluno) {
+            return redirect()->back()->with('error', 'Você não está registrado como aluno.');
+        }
+    
+       
+        $horasTotal = $aluno->comprovantes()->sum('horas');
+    
+        if ($horasTotal < 40) {
+            return redirect()->back()->with('error', 'Você ainda não cumpriu as horas necessárias para emitir a declaração.');
+        }
+    
+        return view('declaracoes.aluno', compact('aluno', 'horasTotal'));
     }
-
-    return view('declaracoes.aluno', compact('aluno'));
-}
-
 };
 
