@@ -8,6 +8,7 @@ use App\Models\Aluno;
 
 class Solicitacao extends Model
 {
+     protected $table = 'solicitacoes';
     protected $fillable = [
         'user_id',
         'categoria_id',

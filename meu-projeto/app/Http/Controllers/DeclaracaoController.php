@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Declaracao;
 use App\Models\Aluno;
 use App\Models\Comprovante;
+use Illuminate\Support\Facades\Auth;
+
 
 class DeclaracaoController extends Controller
 {
@@ -90,4 +92,23 @@ class DeclaracaoController extends Controller
 
         return redirect()->route('declaracoes.index')->with('success', 'Declaração excluída com sucesso!');
     }
+
+public function emitirParaAluno()
+{
+    $user = Auth::user();
+    $aluno = $user->aluno;
+
+    if (!$aluno) {
+        return redirect()->back()->with('error', 'Você não está registrado como aluno.');
+    }
+
+    
+    if ($aluno->horas_complementares < 40) {
+        return redirect()->back()->with('error', 'Você ainda não cumpriu as horas necessárias para emitir a declaração.');
+    }
+
+    return view('declaracoes.aluno', compact('aluno'));
+}
+
 };
+

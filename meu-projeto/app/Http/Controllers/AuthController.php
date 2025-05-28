@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User; 
 use Illuminate\Support\Facades\Hash; 
 use Illuminate\Support\Facades\Auth; 
+use App\Models\Aluno;
+
 
 class AuthController extends Controller
 {
@@ -18,11 +20,19 @@ class AuthController extends Controller
         'password' => 'required|confirmed|min:4',
     ]);
 
-    User::create([
+     $user = User::create([
         'name' => $validated['name'],
         'email' => $validated['email'],
         'password' => Hash::make($validated['password']),
-        'is_admin' => false, 
+        'is_admin' => false,
+    ]);
+
+    
+    Aluno::create([
+        'nome' => $validated['name'],
+        'email' => $validated['email'],
+        'user_id' => $user->id,
+        
     ]);
 
     return redirect()->route('login.aluno')->with('success', 'Cadastro realizado com sucesso!');

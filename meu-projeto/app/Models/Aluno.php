@@ -11,6 +11,7 @@ use App\Models\Declaracao;
 
 class Aluno extends Model
 {
+    
     protected $table = 'alunos';
     protected $fillable = ['nome', 'cpf', 'email', 'senha', 'curso_id', 'turma_id','user_id'];
 
@@ -29,4 +30,10 @@ class Aluno extends Model
     public function declaracoes(){
         return $this->hasMany(Declaracao::class);
     }
+
+    public function user()
+    {
+    return $this->belongsTo(User::class, 'user_id');
+    }
+
 }
