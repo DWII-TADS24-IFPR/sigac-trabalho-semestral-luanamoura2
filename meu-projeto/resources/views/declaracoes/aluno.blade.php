@@ -1,17 +1,7 @@
-<?php
+@extends('layouts.app')
 
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Aluno;
-
-class DeclaracaoController extends Controller
-{
-    public function emitirParaAluno()
-    {
-        $user = Auth::user(); 
-
-        
-    }
-}
+@section('content')
+    <h1>Declaração do Aluno</h1>
+    <p>Aluno: {{ $aluno->nome }}</p>
+    <p>Total de horas: {{ $horasTotal }}</p>
+@endsection

@@ -1,15 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Minhas Solicitações')
+@section('title', 'Solicitações - Administração')
 
 @section('content')
 <div class="container mt-5">
     <div class="card shadow rounded-4">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">Minhas Solicitações</h4>
-            <a href="{{ route('solicitacoes.create') }}" class="btn btn-light btn-sm">
-                <i class="bi bi-plus-circle"></i> Nova Solicitação
-            </a>
+            <h4 class="mb-0">Solicitações</h4>
         </div>
         <div class="card-body">
 
@@ -25,6 +22,7 @@
                 <table class="table table-bordered table-striped">
                     <thead class="table-dark">
                         <tr>
+                            <th>Aluno</th>
                             <th>Descrição</th>
                             <th>Categoria</th>
                             <th>Carga Horária</th>
@@ -35,6 +33,7 @@
                     <tbody>
                         @foreach($solicitacoes as $solicitacao)
                             <tr>
+                                <td>{{ $solicitacao->aluno->name ?? 'Sem aluno' }}</td>
                                 <td>{{ $solicitacao->descricao }}</td>
                                 <td>{{ $solicitacao->categoria->nome ?? 'Sem categoria' }}</td>
                                 <td>{{ $solicitacao->carga_horaria }}</td>
@@ -43,15 +42,22 @@
                                         <span class="badge bg-warning text-dark">Pendente</span>
                                     @elseif($solicitacao->status == 'aprovado')
                                         <span class="badge bg-success">Aprovado</span>
-                                    @elseif($solicitacao->status == 'reprovado')
-                                        <span class="badge bg-danger">Reprovado</span>
+                                    @elseif($solicitacao->status == 'rejeitado')
+                                        <span class="badge bg-danger">Rejeitado</span>
                                     @else
                                         <span class="badge bg-secondary">{{ $solicitacao->status }}</span>
                                     @endif
                                 </td>
                                 <td>
-                                
-                                   
+                                    <form action="{{ route('solicitacoes.aprovar', $solicitacao->id) }}" method="POST" style="display:inline-block;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success btn-sm">Aprovar</button>
+                                    </form>
+                                    <form action="{{ route('solicitacoes.rejeitar', $solicitacao->id) }}" method="POST" style="display:inline-block;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-sm">Rejeitar</button>
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

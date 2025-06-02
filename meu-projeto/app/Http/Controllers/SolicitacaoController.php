@@ -16,6 +16,7 @@ class SolicitacaoController extends Controller
 {
     public function index()
     {
+
         $user = Auth::user();
 
         if (!$user) {
@@ -45,6 +46,7 @@ class SolicitacaoController extends Controller
         return view('solicitacoes.create', compact('categorias'));
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
@@ -72,22 +74,56 @@ class SolicitacaoController extends Controller
     {
         $user = Auth::user();
         $aluno = $user->aluno;
-    
+
         if (!$aluno) {
             return redirect()->back()->with('error', 'Você não está cadastrado como aluno.');
         }
-    
-        
-        $totalHoras = \App\Models\Comprovante::where('aluno_id', $aluno->id)
+
+
+        $totalHoras = Solicitacao::where('user_id', $user->id)
             ->where('status', 'aprovado')
-            ->sum('horas'); 
-    
+            ->sum('carga_horaria');
+
+
         $horasMinimas = 40;
-    
+
         if ($totalHoras < $horasMinimas) {
             return redirect()->back()->with('error', 'Você ainda não cumpriu as horas necessárias para emitir a declaração.');
         }
-    
+
         return view('declaracoes.emitir', compact('aluno', 'totalHoras'));
     }
-}    
+
+
+    public function adminIndex()
+    {
+
+        if (!Auth::user()->is_admin) {
+            abort(403, 'Acesso não autorizado.');
+        }
+
+
+        $solicitacoes = Solicitacao::with(['aluno', 'categoria'])->orderBy('created_at', 'desc')->get();
+
+        return view('admin.solicitacoes.index', compact('solicitacoes'));
+    }
+
+
+    public function aprovar($id)
+    {
+        $solicitacao = Solicitacao::findOrFail($id);
+        $solicitacao->status = 'aprovado';
+        $solicitacao->save();
+
+        return redirect()->back()->with('success', 'Solicitação aprovada com sucesso!');
+    }
+
+    public function rejeitar($id)
+    {
+        $solicitacao = Solicitacao::findOrFail($id);
+        $solicitacao->status = 'reprovado';
+        $solicitacao->save();
+
+        return redirect()->back()->with('success', 'Solicitação rejeitada com sucesso!');
+    }
+}

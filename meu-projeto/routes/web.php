@@ -19,6 +19,10 @@ use App\Http\Controllers\{
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AlunoMiddleware;
 
+
+Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');
+
 Route::post('admin/login', [AdminController::class, 'loginAdmin'])->name('login.admin.post');
 
 Route::get('/entrada', fn() => view('entrada'))->name('entrada');
@@ -40,8 +44,9 @@ Route::prefix('admin')->group(function () {
     Route::post('login', [AdminController::class, 'loginAdmin'])->name('login.admin.post');
 });
 
-Route::middleware([AdminMiddleware::class,'auth'])->group(function () {
+Route::middleware([AdminMiddleware::class, 'auth'])->group(function () {
     Route::resource('/eixos', EixoController::class);
+    Route::get('/solicitacoes', [SolicitacaoController::class, 'adminIndex'])->name('admin.solicitacoes.index');
     Route::resources([
         'nivels' => NivelController::class,
         'alunos' => AlunoController::class,
@@ -52,9 +57,9 @@ Route::middleware([AdminMiddleware::class,'auth'])->group(function () {
         'documentos' => DocumentoController::class,
         'turmas' => TurmaController::class,
     ]);
-    Route::post('comprovantes/{comprovante}/aprovar', [App\Http\Controllers\ComprovanteController::class, 'aprovar'])->name('comprovantes.aprovar');
-    Route::post('comprovantes/{comprovante}/rejeitar', [App\Http\Controllers\ComprovanteController::class, 'rejeitar'])->name('comprovantes.rejeitar');
 });
+Route::post('/solicitacoes/{solicitacao}/aprovar', [SolicitacaoController::class, 'aprovar'])->name('solicitacoes.aprovar');
+Route::post('/solicitacoes/{solicitacao}/rejeitar', [SolicitacaoController::class, 'rejeitar'])->name('solicitacoes.rejeitar');
 
 Route::get('/relatorios', [Relatoriocontroller::class, 'emitirRelatorio'])->name('relatorio.emitir');
 
@@ -64,6 +69,8 @@ Route::prefix('aluno')->middleware(['auth', AlunoMiddleware::class])->group(func
     Route::get('/solicitacoes', [SolicitacaoController::class, 'index'])->name('solicitacoes.index');
     Route::get('/solicitacoes/create', [SolicitacaoController::class, 'create'])->name('solicitacoes.create');
     Route::post('/solicitacoes', [SolicitacaoController::class, 'store'])->name('solicitacoes.store');
+
+
 
     Route::get('/declaracoes/emitir', [SolicitacaoController::class, 'emitirDeclaracao'])->name('declaracoes.emitir');
 });
