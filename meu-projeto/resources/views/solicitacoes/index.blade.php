@@ -8,7 +8,7 @@
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Minhas Solicitações</h4>
             <a href="{{ route('solicitacoes.create') }}" class="btn btn-light btn-sm">
-                <i class="bi bi-plus-circle"></i> Nova Solicitação
+                <i class="bi bi-file-earmark-plus"></i> Nova Solicitação
             </a>
         </div>
         <div class="card-body">
@@ -29,7 +29,6 @@
                             <th>Categoria</th>
                             <th>Carga Horária</th>
                             <th>Status</th>
-                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,7 +36,7 @@
                             <tr>
                                 <td>{{ $solicitacao->descricao }}</td>
                                 <td>{{ $solicitacao->categoria->nome ?? 'Sem categoria' }}</td>
-                                <td>{{ $solicitacao->carga_horaria }}</td>
+                                <td>{{ $solicitacao->carga_horaria }} horas</td>
                                 <td>
                                     @if($solicitacao->status == 'pendente')
                                         <span class="badge bg-warning text-dark">Pendente</span>
@@ -46,12 +45,9 @@
                                     @elseif($solicitacao->status == 'reprovado')
                                         <span class="badge bg-danger">Reprovado</span>
                                     @else
-                                        <span class="badge bg-secondary">{{ $solicitacao->status }}</span>
+                                        <span class="badge bg-secondary">{{ ucfirst($solicitacao->status) }}</span>
                                     @endif
                                 </td>
-                                <td>
-                                
-                                   
                             </tr>
                         @endforeach
                     </tbody>

@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     NivelController,
@@ -57,6 +58,7 @@ Route::middleware([AdminMiddleware::class, 'auth'])->group(function () {
         'documentos' => DocumentoController::class,
         'turmas' => TurmaController::class,
     ]);
+     
 });
 Route::post('/solicitacoes/{solicitacao}/aprovar', [SolicitacaoController::class, 'aprovar'])->name('solicitacoes.aprovar');
 Route::post('/solicitacoes/{solicitacao}/rejeitar', [SolicitacaoController::class, 'rejeitar'])->name('solicitacoes.rejeitar');

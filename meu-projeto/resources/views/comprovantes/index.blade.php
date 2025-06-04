@@ -29,69 +29,38 @@
                         <th>Horas</th>
                         <th>Categoria</th>
                         <th>Aluno</th>
-                        <th>Status</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($comprovantes as $comprovante)
+                    @foreach($comprovantes as $comprovante)
                         <tr>
                             <td>{{ $comprovante->atividade }}</td>
-                            <td>{{ $comprovante->horas }}</td>
-                            <td>{{ $comprovante->categoria->nome ?? '-' }}</td>
-                            <td>{{ $comprovante->aluno->nome ?? '-' }}</td>
+                            <td>{{ number_format($comprovante->horas, 1, ',', '.') }} horas</td>
+                            <td>{{ $comprovante->categoria ? $comprovante->categoria->nome : 'Categoria não encontrada' }}</td>
+                            <td>{{ $comprovante->aluno ? $comprovante->aluno->nome : 'Aluno não encontrado' }}</td>
+                           
                             <td>
-                                @if ($comprovante->status == 'pendente')
-                                    <span class="badge bg-warning text-dark">Pendente</span>
-                                @elseif ($comprovante->status == 'aprovado')
-                                    <span class="badge bg-success">Aprovado</span>
-                                @elseif ($comprovante->status == 'rejeitado')
-                                    <span class="badge bg-danger">Rejeitado</span>
-                                @else
-                                    <span class="badge bg-secondary">Desconhecido</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('comprovantes.show', $comprovante->id) }}" class="btn btn-info btn-sm me-1" title="Visualizar">
-                                    <i class="bi bi-eye"></i>
+                                <a href="{{ route('comprovantes.show', $comprovante->id) }}" class="btn btn-info btn-sm">
+                                    <i class="bi bi-eye"></i> Visualizar
                                 </a>
-                                <a href="{{ route('comprovantes.edit', $comprovante->id) }}" class="btn btn-warning btn-sm me-1" title="Editar">
-                                    <i class="bi bi-pencil"></i>
+                                <a href="{{ route('comprovantes.edit', $comprovante->id) }}" class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil"></i> Editar
                                 </a>
-
-                                @if(auth()->user()->is_admin && $comprovante->status == 'pendente')
-                                    <form action="{{ route('comprovantes.aprovar', $comprovante->id) }}" method="POST" class="d-inline me-1">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Aprovar este comprovante?')" title="Aprovar">
-                                            <i class="bi bi-check-circle"></i>
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('comprovantes.rejeitar', $comprovante->id) }}" method="POST" class="d-inline me-1">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Rejeitar este comprovante?')" title="Rejeitar">
-                                            <i class="bi bi-x-circle"></i>
-                                        </button>
-                                    </form>
-                                @endif
-
-                                <form action="{{ route('comprovantes.destroy', $comprovante->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir?')" title="Excluir">
+                                <form action="{{ route('comprovantes.destroy', $comprovante->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-trash"></i>
+                                        <i class="bi bi-trash"></i> Deletar
                                     </button>
                                 </form>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center">Nenhum comprovante cadastrado.</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
 
-        </div> 
-    </div> 
-</div> 
+        </div>
+    </div>
+</div>
 @endsection

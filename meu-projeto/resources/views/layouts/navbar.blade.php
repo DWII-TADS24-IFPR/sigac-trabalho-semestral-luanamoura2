@@ -23,6 +23,9 @@
 
         @if($user && $user->isAluno())
           <li class="nav-item">
+            <a class="nav-link active" href="{{ url('/') }}">Home</a>
+          </li>
+          <li class="nav-item">
               <a class="nav-link" href="{{ route('solicitacoes.index') }}">Solicitações</a>
           </li>
           <li class="nav-item">
